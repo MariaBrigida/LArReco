@@ -22,7 +22,7 @@
 #include "larpandoradlcontent/LArDLContent.h"
 #endif
 
-#include "larreco/include/MyTrackShowerIdAlgorithm.h"
+#include "MyTrackShowerIdAlgorithm.h"
 
 #include "PandoraInterface.h"
 
@@ -101,9 +101,8 @@ void CreatePandoraInstances(const Parameters &parameters, const Pandora *&pPrima
 
     ProcessExternalParameters(parameters, pPrimaryPandora);
     PANDORA_THROW_RESULT_IF(STATUS_CODE_SUCCESS, !=, PandoraApi::SetPseudoLayerPlugin(*pPrimaryPandora, new lar_content::LArPseudoLayerPlugin));
-    PANDORA_THROW_RESULT_IF(STATUS_CODE_SUCCESS, !=,
-        PandoraApi::SetLArTransformationPlugin(*pPrimaryPandora, new lar_content::LArRotationalTransformationPlugin));
-    PANDORA_THROW_RESULT_IF(STATUS_CODE_SUCCESS, !=, LArContent::RegisterAlgorithmFactory(*pPrimaryPandora,"MyTrackShowerId", new lar_reco::MyTrackShowerIdAlgorithm::Factory));
+    PANDORA_THROW_RESULT_IF(STATUS_CODE_SUCCESS, !=, PandoraApi::SetLArTransformationPlugin(*pPrimaryPandora, new lar_content::LArRotationalTransformationPlugin));
+    PANDORA_THROW_RESULT_IF(STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterAlgorithmFactory(*pPrimaryPandora,"MyTrackShowerId", new lar_reco::MyTrackShowerIdAlgorithm::Factory));
     PANDORA_THROW_RESULT_IF(STATUS_CODE_SUCCESS, !=, PandoraApi::ReadSettings(*pPrimaryPandora, parameters.m_settingsFile));
 }
 
