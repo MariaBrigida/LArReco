@@ -210,11 +210,9 @@ StatusCode MyTrackShowerIdAlgorithm::Run()
         CartesianVector vertexPositionV = LArGeometryHelper::ProjectPosition(this->GetPandora(),vertexPosition,TPC_VIEW_V);
         CartesianVector vertexPositionW = LArGeometryHelper::ProjectPosition(this->GetPandora(),vertexPosition,TPC_VIEW_W);
 
-        float vertexDriftPositionU=vertexPositionU.GetX();
+        float vertexDriftPosition=vertexPositionU.GetX();
         float vertexWirePositionU=vertexPositionU.GetZ();
-        float vertexDriftPositionV=vertexPositionV.GetX();
         float vertexWirePositionV=vertexPositionV.GetZ();
-        float vertexDriftPositionW=vertexPositionW.GetX();
         float vertexWirePositionW=vertexPositionW.GetZ();
 
         // Write to tree here
