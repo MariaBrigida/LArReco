@@ -324,8 +324,6 @@ StatusCode MyTrackShowerIdAlgorithm::Run()
         PANDORA_MONITORING_API(SetTreeVariable(this->GetPandora(), m_treeName.c_str(), "trueNuVtxW", trueNeutrinoVertexW));
         PANDORA_MONITORING_API(FillTree(this->GetPandora(), m_treeName.c_str()));
     }
-    std::cout << std::endl;
-    
     return STATUS_CODE_SUCCESS;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
