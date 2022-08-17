@@ -46,10 +46,7 @@ void DUNEValidation(const std::string &inputFile1, const std::string &inputFile2
     hList3.Write();
     f3.Close();
 
-
     MakePerformancePlots("output1.root", "output2.root", "output3.root", legend1, legend2, legend3);
-
-    std::cout << "I have run Validation.C" << std::endl;
 }
 
 void DUNEValidation(const std::string &inputFile1, const std::string &inputFile2, const std::string &legend1, const std::string &legend2)
@@ -73,10 +70,7 @@ void DUNEValidation(const std::string &inputFile1, const std::string &inputFile2
     hList2.Write();
     f2.Close();
 
-
     MakePerformancePlots("output1.root", "output2.root", legend1, legend2);
-
-    std::cout << "I have run Validation.C" << std::endl;
 }
 
 

@@ -705,7 +705,7 @@ void FillPrimaryHistogramCollection(const std::string &histPrefix, const Paramet
     }
 
     const int nAngleWithYZBins(80); const int nAngleWithYZBinEdges(nAngleWithYZBins + 1);
-    const float angleWithYZMin(-200), angleWithYZMax(200);
+    const float angleWithYZMin(-100), angleWithYZMax(100);
     float angleWithYZStep = (angleWithYZMax-angleWithYZMin)/nAngleWithYZBins;
     float angleWithYZBinning[nAngleWithYZBinEdges];
     for(int iBin=0; iBin<nAngleWithYZBins; iBin++){
@@ -717,7 +717,7 @@ void FillPrimaryHistogramCollection(const std::string &histPrefix, const Paramet
     if (!primaryHistogramCollection.m_hAngleWithYZAll)
     {
         primaryHistogramCollection.m_hAngleWithYZAll = new TH1F((histPrefix + "AngleWithYZAll").c_str(), "", nAngleWithYZBins, angleWithYZBinning);
-        primaryHistogramCollection.m_hAngleWithYZAll->GetXaxis()->SetRangeUser(-200., +200.);
+        primaryHistogramCollection.m_hAngleWithYZAll->GetXaxis()->SetRangeUser(-100., +100.);
         primaryHistogramCollection.m_hAngleWithYZAll->GetXaxis()->SetTitle("True Momentum Angle with YZ plane [degrees]");
         primaryHistogramCollection.m_hAngleWithYZAll->GetYaxis()->SetTitle("Number of Events");
     }
@@ -745,8 +745,8 @@ void FillPrimaryHistogramCollection(const std::string &histPrefix, const Paramet
     if (!primaryHistogramCollection.m_hAngleInYZAll)
     {
         primaryHistogramCollection.m_hAngleInYZAll = new TH1F((histPrefix + "AngleInYZAll").c_str(), "", nAngleInYZBins, angleInYZBinning);
-        primaryHistogramCollection.m_hAngleInYZAll->GetXaxis()->SetRangeUser(-200., +200);
-        primaryHistogramCollection.m_hAngleInYZAll->GetXaxis()->SetTitle("True Momentum Angle with YZ plane [degrees]");
+        primaryHistogramCollection.m_hAngleInYZAll->GetXaxis()->SetRangeUser(-200., +200.);
+        primaryHistogramCollection.m_hAngleInYZAll->GetXaxis()->SetTitle("True Momentum Angle in YZ plane with respect to Z axis [degrees]");
         primaryHistogramCollection.m_hAngleInYZAll->GetYaxis()->SetTitle("Number of Events");
     }
 
@@ -754,7 +754,8 @@ void FillPrimaryHistogramCollection(const std::string &histPrefix, const Paramet
     {
         primaryHistogramCollection.m_hAngleInYZEfficiency = new TH1F((histPrefix + "AngleInYZEfficiency").c_str(), "", nAngleInYZBins, angleInYZBinning);
         primaryHistogramCollection.m_hAngleInYZEfficiency->GetXaxis()->SetRangeUser(-200., 200.);
-        primaryHistogramCollection.m_hAngleInYZEfficiency->GetXaxis()->SetTitle("Momentum Angle in YZ plane with respect to Y axis [degrees]");
+        //primaryHistogramCollection.m_hAngleInYZEfficiency->GetXaxis()->SetTitle("Momentum Angle in YZ plane with respect to Y axis [degrees]");
+        primaryHistogramCollection.m_hAngleInYZEfficiency->GetXaxis()->SetTitle("True Momentum Angle in YZ plane with respect to Z axis [degrees]");
         primaryHistogramCollection.m_hAngleInYZEfficiency->GetYaxis()->SetRangeUser(0., +1.01);
         primaryHistogramCollection.m_hAngleInYZEfficiency->GetYaxis()->SetTitle("Reconstruction Efficiency");
     }
@@ -860,11 +861,13 @@ void FillPrimaryHistogramCollection(const std::string &histPrefix, const Paramet
     TVector3 momentumVector(primaryResult.m_trueMomentumX,primaryResult.m_trueMomentumY,primaryResult.m_trueMomentumZ);
     TVector3 vectorInYZ(0,primaryResult.m_trueMomentumY,primaryResult.m_trueMomentumZ);
     TVector3 yUnitVector(0,1,0);
+    TVector3 zUnitVector(0,0,1);
     float angleWithYZ=vectorInYZ.Angle(momentumVector);
-    angleWithYZ = primaryResult.m_trueMomentumX>0?angleWithYZ:-angleWithYZ;  //Taking into account angle sign, not just      magnitude
-    float angleInYZ=vectorInYZ.Angle(yUnitVector);
-    angleInYZ = primaryResult.m_trueMomentumZ>0?angleInYZ:-angleInYZ; //Taking into account angle sign, not just magnitu     de
-    //float angleInYZ=TMath::ACos((vectorInYZ.Dot(yUnitVector))/vectorInYZ.Mag());
+    angleWithYZ = primaryResult.m_trueMomentumX>0?angleWithYZ:-angleWithYZ;  //Taking into account angle sign, not just magnitude
+    //float angleInYZ=vectorInYZ.Angle(yUnitVector);
+    float angleInYZ=vectorInYZ.Angle(zUnitVector);
+    //angleInYZ = primaryResult.m_trueMomentumZ>0?angleInYZ:-angleInYZ; //Taking into account angle sign, not just magnitude
+    angleInYZ = primaryResult.m_trueMomentumY>0?angleInYZ:-angleInYZ; //Taking into account angle sign, not just magnitude
     //float angleInYZ=vectorInYZ.Angle(yUnitVector);
 
     //std::cout << " angleWithYZ " << angleWithYZ << " angleInYZ = " << angleInYZ << std::endl;

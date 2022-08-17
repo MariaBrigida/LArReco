@@ -50,11 +50,13 @@ void MakePerformancePlots(const std::string &filename1, const std::string &filen
     TString regPurity = "*Purity";
     TString regHits = "*HitsEfficiency";
     TString regMomentum = "*MomentumEfficiency";
-    TString regAngWithYZ = "*AngleWithYZEfficiency";
-    TString regAngInYZ = "*AngleInYZEfficiency";
+    TString regAngWithYZEffi = "*AngleWithYZEfficiency";
+    TString regAngInYZEffi = "*AngleInYZEfficiency";
     TString regXVertex = "*XVertexEfficiency";
     TString regYVertex = "*YVertexEfficiency";
     TString regZVertex = "*ZVertexEfficiency";
+    TString regAngWithYZ = "*AngleWithYZAll";
+    TString regAngInYZ = "*AngleInYZAll";
     //TString regVertexDeltaR = "ALL_INTERACTIONS_VtxDeltaR";
     
     TRegexp reAll(regAll,kTRUE);
@@ -62,6 +64,8 @@ void MakePerformancePlots(const std::string &filename1, const std::string &filen
     TRegexp rePur(regPurity,kTRUE);
     TRegexp reHits(regHits,kTRUE);
     TRegexp reMom(regMomentum,kTRUE);
+    TRegexp reAngWithYZEffi(regAngWithYZEffi,kTRUE);
+    TRegexp reAngInYZEffi(regAngInYZEffi,kTRUE);
     TRegexp reAngWithYZ(regAngWithYZ,kTRUE);
     TRegexp reAngInYZ(regAngInYZ,kTRUE);
     TRegexp reXVtex(regXVertex,kTRUE);
@@ -82,7 +86,9 @@ void MakePerformancePlots(const std::string &filename1, const std::string &filen
     TH1F* hHitsEfficiency[6][nConfigToCompare];
     TH1F* hMomentumEfficiency[6][nConfigToCompare];      
     TH1F* hAngleWithYZEfficiency[6][nConfigToCompare];      
-    TH1F* hAngleInYZEfficiency[6][nConfigToCompare];      
+    TH1F* hAngleInYZEfficiency[6][nConfigToCompare];     
+    TH1F* hAngleWithYZ[6][nConfigToCompare];      
+    TH1F* hAngleInYZ[6][nConfigToCompare];      
     TH1F* hXVertexEfficiency[6][nConfigToCompare];      
     TH1F* hYVertexEfficiency[6][nConfigToCompare];      
     TH1F* hZVertexEfficiency[6][nConfigToCompare];      
@@ -91,7 +97,7 @@ void MakePerformancePlots(const std::string &filename1, const std::string &filen
     TKey *key;
     Int_t i(1);
     while ((key= (TKey*)next()))
-    { 
+    {
         TString st = key->GetName();
         vector<TH1F*> hTemp;
         for(int iConf=0; iConf<nConfigToCompare; iConf++)
@@ -110,8 +116,6 @@ void MakePerformancePlots(const std::string &filename1, const std::string &filen
                 for(int iConf=0; iConf<nConfigToCompare; iConf++)
                 {
                     hCompleteness[iPart][iConf]=hTemp[iConf];
-                    std::cout << "partName = " << partName << " iConf = " << iConf << " iPart = " << iPart << " entries = " <<
-                        hCompleteness[iPart][iConf]->GetEntries() << std::endl;
                 }
             }
             
@@ -137,18 +141,33 @@ void MakePerformancePlots(const std::string &filename1, const std::string &filen
             }
 
             //AngleWithYZEfficiency plots            
-            if (!(st.Index(rePart) == kNPOS) && !(st.Index(reAngWithYZ) == kNPOS))
+            if (!(st.Index(rePart) == kNPOS) && !(st.Index(reAngWithYZEffi) == kNPOS))
             {
                 for(int iConf=0; iConf<nConfigToCompare; iConf++)
                     hAngleWithYZEfficiency[iPart][iConf]=hTemp[iConf];
             }
 
-            //AngleInXEfficiency plots            
-            if (!(st.Index(rePart) == kNPOS) && !(st.Index(reAngInYZ) == kNPOS))
+            //AngleInYZEfficiency plots            
+            if (!(st.Index(rePart) == kNPOS) && !(st.Index(reAngInYZEffi) == kNPOS))
             {
                 for(int iConf=0; iConf<nConfigToCompare; iConf++)
                     hAngleInYZEfficiency[iPart][iConf]=hTemp[iConf];
             }
+
+            //AngleWithYZ plots            
+            if (!(st.Index(rePart) == kNPOS) && !(st.Index(reAngWithYZ) == kNPOS))
+            {
+                for(int iConf=0; iConf<nConfigToCompare; iConf++)
+                    hAngleWithYZ[iPart][iConf]=hTemp[iConf];
+            }
+
+            //AngleInYZ plots            
+            if (!(st.Index(rePart) == kNPOS) && !(st.Index(reAngInYZ) == kNPOS))
+            {
+                for(int iConf=0; iConf<nConfigToCompare; iConf++)
+                    hAngleInYZ[iPart][iConf]=hTemp[iConf];
+            }
+
 
             //XVertexEfficiency plots            
             if (!(st.Index(rePart) == kNPOS) && !(st.Index(reXVtex) == kNPOS))
@@ -188,6 +207,7 @@ void MakePerformancePlots(const std::string &filename1, const std::string &filen
         SetPlotTitle(hCompleteness[iPart][0], iPart);
         for(int iConf = 0; iConf < nConfigToCompare; iConf++)
         {
+            hCompleteness[iPart][iConf]->Print("test.eps");
             FormatPlot(hCompleteness[iPart][iConf], iConf);
             hCompleteness[iPart][iConf]->Draw(iConf > 0 ? "p same" : "p");
             if (iPart == 0)
@@ -238,7 +258,7 @@ void MakePerformancePlots(const std::string &filename1, const std::string &filen
         SetPlotTitle(hAngleWithYZEfficiency[iPart][0], iPart);
         for(int iConf=0; iConf<nConfigToCompare; iConf++)
         {
-            FormatPlotWithRange(hAngleWithYZEfficiency[iPart][iConf], iConf, 0, 180);
+            FormatPlotWithRange(hAngleWithYZEfficiency[iPart][iConf], iConf, -100, 100);
             hAngleWithYZEfficiency[iPart][iConf]->Draw(iConf > 0 ? "p same" : "p");
         }
 
@@ -250,12 +270,38 @@ void MakePerformancePlots(const std::string &filename1, const std::string &filen
         SetPlotTitle(hAngleInYZEfficiency[iPart][0], iPart);
         for(int iConf=0; iConf<nConfigToCompare; iConf++)
         {
-            FormatPlotWithRange(hAngleInYZEfficiency[iPart][iConf], iConf, 0, 180);
+            FormatPlotWithRange(hAngleInYZEfficiency[iPart][iConf], iConf, -200, 200);
             hAngleInYZEfficiency[iPart][iConf]->Draw(iConf > 0 ? "p same" : "p");
         }
 
         legend->Draw("same");
         SaveToFile(c, iPart, "AngleInYZEfficiency");
+
+        //AngleWithYZ
+        gPad-> SetLogx(0);
+        SetPlotTitle(hAngleWithYZ[iPart][0], iPart);
+        for(int iConf=0; iConf<nConfigToCompare; iConf++)
+        {
+            FormatPlotWithRange(hAngleWithYZ[iPart][iConf], iConf, -100, 100);
+            hAngleWithYZ[iPart][iConf]->Draw(iConf > 0 ? "p same" : "p");
+        }
+
+        legend->Draw("same");
+        SaveToFile(c, iPart, "AngleWithYZ");
+
+
+        //AngleInYZ
+        gPad-> SetLogx(0);
+        SetPlotTitle(hAngleInYZ[iPart][0], iPart);
+        for(int iConf=0; iConf<nConfigToCompare; iConf++)
+        {
+            FormatPlotWithRange(hAngleInYZ[iPart][iConf], iConf, -200, 200);
+            hAngleInYZ[iPart][iConf]->Draw(iConf > 0 ? "p same" : "p");
+        }
+
+        legend->Draw("same");
+        SaveToFile(c, iPart, "AngleInYZ");
+
 
         //XVertexEfficiency
         gPad-> SetLogx(0);
@@ -405,11 +451,14 @@ void MakePerformancePlots(const std::string &filename1, const std::string &filen
     TString regPurity = "*Purity";
     TString regHits = "*HitsEfficiency";
     TString regMomentum = "*MomentumEfficiency";
-    TString regAngWithYZ = "*AngleWithYZEfficiency";
-    TString regAngInYZ = "*AngleInYZEfficiency";
+    TString regAngWithYZEffi = "*AngleWithYZEfficiency";
+    TString regAngInYZEffi = "*AngleInYZEfficiency";
     TString regXVertex = "*XVertexEfficiency";
     TString regYVertex = "*YVertexEfficiency";
     TString regZVertex = "*ZVertexEfficiency";
+    TString regAngWithYZ = "*AngleWithYZAll";
+    TString regAngInYZ = "*AngleInYZAll";
+
     //TString regVertexDeltaR = "ALL_INTERACTIONS_VtxDeltaR";
     
     TRegexp reAll(regAll,kTRUE);
@@ -417,6 +466,8 @@ void MakePerformancePlots(const std::string &filename1, const std::string &filen
     TRegexp rePur(regPurity,kTRUE);
     TRegexp reHits(regHits,kTRUE);
     TRegexp reMom(regMomentum,kTRUE);
+    TRegexp reAngWithYZEffi(regAngWithYZEffi,kTRUE);
+    TRegexp reAngInYZEffi(regAngInYZEffi,kTRUE);
     TRegexp reAngWithYZ(regAngWithYZ,kTRUE);
     TRegexp reAngInYZ(regAngInYZ,kTRUE);
     TRegexp reXVtex(regXVertex,kTRUE);
@@ -437,7 +488,9 @@ void MakePerformancePlots(const std::string &filename1, const std::string &filen
     TH1F* hHitsEfficiency[6][nConfigToCompare];
     TH1F* hMomentumEfficiency[6][nConfigToCompare];      
     TH1F* hAngleWithYZEfficiency[6][nConfigToCompare];      
-    TH1F* hAngleInYZEfficiency[6][nConfigToCompare];      
+    TH1F* hAngleInYZEfficiency[6][nConfigToCompare];     
+    TH1F* hAngleWithYZ[6][nConfigToCompare];      
+    TH1F* hAngleInYZ[6][nConfigToCompare];      
     TH1F* hXVertexEfficiency[6][nConfigToCompare];      
     TH1F* hYVertexEfficiency[6][nConfigToCompare];      
     TH1F* hZVertexEfficiency[6][nConfigToCompare];      
@@ -492,18 +545,33 @@ void MakePerformancePlots(const std::string &filename1, const std::string &filen
             }
 
             //AngleWithYZEfficiency plots            
-            if (!(st.Index(rePart) == kNPOS) && !(st.Index(reAngWithYZ) == kNPOS))
+            if (!(st.Index(rePart) == kNPOS) && !(st.Index(reAngWithYZEffi) == kNPOS))
             {
                 for(int iConf=0; iConf<nConfigToCompare; iConf++)
                     hAngleWithYZEfficiency[iPart][iConf]=hTemp[iConf];
             }
 
-            //AngleInXEfficiency plots            
-            if (!(st.Index(rePart) == kNPOS) && !(st.Index(reAngInYZ) == kNPOS))
+            //AngleInYZEfficiency plots            
+            if (!(st.Index(rePart) == kNPOS) && !(st.Index(reAngInYZEffi) == kNPOS))
             {
                 for(int iConf=0; iConf<nConfigToCompare; iConf++)
                     hAngleInYZEfficiency[iPart][iConf]=hTemp[iConf];
             }
+
+            //AngleWithYZ plots            
+            if (!(st.Index(rePart) == kNPOS) && !(st.Index(reAngWithYZ) == kNPOS))
+            {
+                for(int iConf=0; iConf<nConfigToCompare; iConf++)
+                    hAngleWithYZ[iPart][iConf]=hTemp[iConf];
+            }
+
+            //AngleInYZ plots            
+            if (!(st.Index(rePart) == kNPOS) && !(st.Index(reAngInYZ) == kNPOS))
+            {
+                for(int iConf=0; iConf<nConfigToCompare; iConf++)
+                    hAngleInYZ[iPart][iConf]=hTemp[iConf];
+            }
+
 
             //XVertexEfficiency plots            
             if (!(st.Index(rePart) == kNPOS) && !(st.Index(reXVtex) == kNPOS))
@@ -593,7 +661,7 @@ void MakePerformancePlots(const std::string &filename1, const std::string &filen
         SetPlotTitle(hAngleWithYZEfficiency[iPart][0], iPart);
         for(int iConf=0; iConf<nConfigToCompare; iConf++)
         {
-            FormatPlotWithRange(hAngleWithYZEfficiency[iPart][iConf], iConf, 0, 180);
+            FormatPlotWithRange(hAngleWithYZEfficiency[iPart][iConf], iConf, -200, 200);
             hAngleWithYZEfficiency[iPart][iConf]->Draw(iConf > 0 ? "p same" : "p");
         }
 
@@ -605,12 +673,38 @@ void MakePerformancePlots(const std::string &filename1, const std::string &filen
         SetPlotTitle(hAngleInYZEfficiency[iPart][0], iPart);
         for(int iConf=0; iConf<nConfigToCompare; iConf++)
         {
-            FormatPlotWithRange(hAngleInYZEfficiency[iPart][iConf], iConf, 0, 180);
+            FormatPlotWithRange(hAngleInYZEfficiency[iPart][iConf], iConf, -200, 200);
             hAngleInYZEfficiency[iPart][iConf]->Draw(iConf > 0 ? "p same" : "p");
         }
 
         legend->Draw("same");
         SaveToFile(c, iPart, "AngleInYZEfficiency");
+
+        //AngleWithYZ
+        gPad-> SetLogx(0);
+        SetPlotTitle(hAngleWithYZ[iPart][0], iPart);
+        for(int iConf=0; iConf<nConfigToCompare; iConf++)
+        {
+            FormatPlotWithRange(hAngleWithYZ[iPart][iConf], iConf, -100, 100);
+            hAngleWithYZ[iPart][iConf]->Draw(iConf > 0 ? "p same" : "p");
+        }
+
+        legend->Draw("same");
+        SaveToFile(c, iPart, "AngleWithYZ");
+
+
+        //AngleInYZ
+        gPad-> SetLogx(0);
+        SetPlotTitle(hAngleInYZ[iPart][0], iPart);
+        for(int iConf=0; iConf<nConfigToCompare; iConf++)
+        {
+            FormatPlotWithRange(hAngleInYZ[iPart][iConf], iConf, -200, 200);
+            hAngleInYZ[iPart][iConf]->Draw(iConf > 0 ? "p same" : "p");
+        }
+
+        legend->Draw("same");
+        SaveToFile(c, iPart, "AngleInYZ");
+
 
         //XVertexEfficiency
         gPad-> SetLogx(0);
