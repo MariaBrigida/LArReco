@@ -619,15 +619,15 @@
     </algorithm>
 
     <!-- 3D reclustering based off calorimetric shower profiles -->
-    <algorithm type = "LArSplitMergedShowers">
+    <algorithm type = "LArThreeDReclustering">
         <PfoListName>ShowerParticles3D</PfoListName>
         <McParticleListName>Input</McParticleListName>
         <TestListName>TestClusterList</TestListName>
-        <DrawProfiles>false</DrawProfiles>
+        <VisualDisplaysOn>true</VisualDisplaysOn>
         <HitThresholdForNewPfo>10</HitThresholdForNewPfo>
         <MCParticleListName>Input</MCParticleListName>
         <clusteringAlgorithms>
-            <algorithm type = "LArTransverseCaloReclustering" instance = "Reclustering1">
+            <algorithm type = "LArCheatedThreeDClustering" instance = "Reclustering1">
                 <MCParticleListName>Input</MCParticleListName>
                 <DrawProfiles>false</DrawProfiles>
             </algorithm>
@@ -691,10 +691,10 @@
         <OutputFile>tree.root</OutputFile>
     </algorithm>
 
-    <algorithm type = "LArShowerHierarchyMopUp">
+    <!--algorithm type = "LArShowerHierarchyMopUp">
         <LeadingPfoListName>NeutrinoParticles3D</LeadingPfoListName>
         <DaughterListNames>TrackParticles3D ShowerParticles3D DaughterVertices3D ClustersU ClustersV ClustersW TrackClusters3D ShowerClusters3D</DaughterListNames>
-    </algorithm>
+    </algorithm-->
 
     <algorithm type = "LArNeutrinoProperties">
         <NeutrinoPfoListName>NeutrinoParticles3D</NeutrinoPfoListName>
