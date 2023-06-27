@@ -621,18 +621,22 @@
     <!-- 3D reclustering based off calorimetric shower profiles -->
     <algorithm type = "LArThreeDReclustering">
         <PfoListName>ShowerParticles3D</PfoListName>
+        <HitThresholdForNewPfo>1</HitThresholdForNewPfo>
         <McParticleListName>Input</McParticleListName>
         <TestListName>TestClusterList</TestListName>
-        <VisualDisplaysOn>true</VisualDisplaysOn>
-        <HitThresholdForNewPfo>10</HitThresholdForNewPfo>
+        <VisualDisplaysOn>false</VisualDisplaysOn>
         <MCParticleListName>Input</MCParticleListName>
-        <clusteringAlgorithms>
+        <FigureOfMeritNames>cheated</FigureOfMeritNames>
+        <ClusteringAlgorithms>
             <algorithm type = "LArCheatedThreeDClustering" instance = "Reclustering1">
                 <MCParticleListName>Input</MCParticleListName>
+                <HitThresholdForNewThreeDCluster>1</HitThresholdForNewThreeDCluster>
                 <DrawProfiles>false</DrawProfiles>
             </algorithm>
-        </clusteringAlgorithms>
+        </ClusteringAlgorithms>
     </algorithm>
+        <!--VisualDisplaysOn>true</VisualDisplaysOn-->
+        <!--FigureOfMeritNames>transversecalo</FigureOfMeritNames-->
 
 
     <!-- Neutrino creation and hierarchy building -->
