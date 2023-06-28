@@ -628,11 +628,20 @@
         <MCParticleListName>Input</MCParticleListName>
         <FigureOfMeritNames>cheated</FigureOfMeritNames>
         <ClusteringAlgorithms>
-            <algorithm type = "LArCheatedThreeDClustering" instance = "Reclustering1">
+            <!--algorithm type = "LArCheatedThreeDClustering" instance = "Reclustering1">
                 <MCParticleListName>Input</MCParticleListName>
                 <HitThresholdForNewThreeDCluster>1</HitThresholdForNewThreeDCluster>
                 <DrawProfiles>false</DrawProfiles>
+            </algorithm-->
+            <algorithm type = "LArDLGraphClustering" instance = "Reclustering1">
+              <TrainingMode>true</TrainingMode>
+              <TrainingOutputFileName>training_out_test</TrainingOutputFileName>
+              <WriteTree>true</WriteTree>
+              <RootFileName>test.root</RootFileName>
+              <RootTreeName>testTree</RootTreeName>
+              <MCParticleListName>Input</MCParticleListName>
             </algorithm>
+
         </ClusteringAlgorithms>
     </algorithm>
         <!--VisualDisplaysOn>true</VisualDisplaysOn-->
