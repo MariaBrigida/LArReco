@@ -583,15 +583,12 @@
         </MopUpAlgorithms>
     </algorithm>
 
-    <!-algorithm type = "LArDLThreeDReclustering"-->
     <algorithm type = "LArThreeDReclustering">
         <PfoListName>ShowerParticles3D</PfoListName>
-        <HitThresholdForNewPfo>1</HitThresholdForNewPfo>
-        <McParticleListName>Input</McParticleListName>
-        <TestListName>TestClusterList</TestListName>
-        <VisualDisplaysOn>false</VisualDisplaysOn>
-        <MCParticleListName>Input</MCParticleListName>
         <FigureOfMeritNames>cheated</FigureOfMeritNames>
+        <MCParticleListName>Input</MCParticleListName>
+        <HitThresholdForNewPfo>1</HitThresholdForNewPfo>
+        <FOMThresholdForReclustering>0.3</FOMThresholdForReclustering>
         <ClusteringTools>
             <tool type = "LArCheatedThreeDClusteringTool">
                 <MCParticleListName>Input</MCParticleListName>
